@@ -9,30 +9,25 @@ import javax.ws.rs.client.WebTarget;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import com.thoughtworks.xstream.XStream;
+
+import br.com.alura.loja.modelo.Projeto;
 import junit.framework.Assert;
 
 public class ProjetoTest {
 	private static String SITE = "http://localhost:8080";
+	private HttpServer server;
+	
 	@Test
 	public void testePesquisaProjeto() {
-		HttpServer servidor = null;
 		String projetoEmXml = "";				
-		try{
-			servidor = criaServidor();
-			servidor.start();
-			projetoEmXml = obtemPesquisaProjeto();
-			System.out.println(projetoEmXml);
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally {
-			if(servidor != null){
-				servidor.stop();
-			}
-		}
-		
-		Assert.assertTrue(projetoEmXml.contains("<nome>Minha Loja</nome>"));
+		projetoEmXml = obtemPesquisaProjeto();	
+		Projeto projeto =  (Projeto) new XStream().fromXML(projetoEmXml);
+		Assert.assertEquals("Minha Loja", projeto.getNome());
 	}
 	
 	private String obtemPesquisaProjeto() {
@@ -41,12 +36,16 @@ public class ProjetoTest {
 		String conteudo = target.path("/projetos").request().get(String.class);
 		return conteudo;
 	}
-
-	private HttpServer criaServidor(){
+	
+	@After
+	public void paraServidor(){
+		server.stop();
+	}
+	
+	@Before
+	public void before(){
 		URI uri = URI.create(SITE);
 		ResourceConfig config = new ResourceConfig().packages("br.com.alura.loja");
-		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, config);
-		return server;		
+		server = GrizzlyHttpServerFactory.createHttpServer(uri, config);				
 	}
-
 }
