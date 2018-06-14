@@ -1,4 +1,4 @@
-package br.com.alura.loja;
+package br.com.alura.loja.server;
 
 import java.net.URI;
 
