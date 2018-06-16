@@ -44,7 +44,7 @@ public class Carrinho {
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	
+
 	public long getId() {
 		return id;
 	}

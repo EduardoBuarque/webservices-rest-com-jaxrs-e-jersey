@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 
+import br.com.alura.loja.server.Servidor;
+
 public class IncializaServidor {
 
 	public static void main(String[] args) {

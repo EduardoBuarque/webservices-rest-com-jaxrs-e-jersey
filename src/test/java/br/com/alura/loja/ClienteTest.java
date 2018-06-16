@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.thoughtworks.xstream.XStream;
 
 import br.com.alura.loja.modelo.Carrinho;
+import br.com.alura.loja.server.Servidor;
 import junit.framework.Assert;
 
 public class ClienteTest {
