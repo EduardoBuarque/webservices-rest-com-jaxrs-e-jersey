@@ -33,7 +33,7 @@ public class ProjetoTest {
 	private String obtemPesquisaProjeto() {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(SITE);
-		String conteudo = target.path("/projetos").request().get(String.class);
+		String conteudo = target.path("/projetos/1").request().get(String.class);
 		return conteudo;
 	}
 	
