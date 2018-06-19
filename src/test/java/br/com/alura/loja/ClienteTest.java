@@ -40,12 +40,16 @@ public class ClienteTest {
 		String xml = carrinho.toXML();
 		Entity<String> entity = Entity.entity(xml, MediaType.APPLICATION_XML);
 		Response response = target.path("/carrinhos").request().post(entity);
-		Assert.assertEquals("<status>sucesso</status>", response.readEntity(String.class));
+		Assert.assertEquals(201, response.getStatus());
+		
+		String location = response.getHeaderString("Location");
+		String conteudo = client.target(location).request().get(String.class);
+		Assert.assertTrue(conteudo.contains("Microfone"));
 	}
 	
 	private Carrinho criaCarrinhoTeste() {
 		Carrinho carrinho = new Carrinho();
-        carrinho.adiciona(new Produto(314L, "Tablet", 999, 1));
+        carrinho.adiciona(new Produto(314L, "Microfone", 999, 1));
         carrinho.setRua("Rua Vergueiro");
         carrinho.setCidade("Sao Paulo");
 		return carrinho;
