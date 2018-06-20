@@ -15,6 +15,7 @@ public class IncializaServidor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		server.stop();		
+		server.stop();
+		System.out.println("Servidor off");
 	}
 }

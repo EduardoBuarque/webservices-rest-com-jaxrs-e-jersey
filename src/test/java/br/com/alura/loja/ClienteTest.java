@@ -58,6 +58,7 @@ public class ClienteTest {
 	@After
 	public void paraServidor(){
 		server.stop();
+		System.out.println("Servidor off");
 	}
 	
 	@Before
