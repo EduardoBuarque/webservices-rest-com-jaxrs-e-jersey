@@ -8,6 +8,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,11 +24,11 @@ import junit.framework.Assert;
 public class ClienteTest {
 	private static String SITE = "http://localhost:8080";
 	private HttpServer server;
+	private Client client;
+	private WebTarget target;
 	
 	@Test
 	public void testaQueBuscarUmCarrinhoTrazOCarrinhoEsperado(){
-		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(SITE);
 		String conteudo = target.path("/carrinhos/1").request().get(String.class);
 		Carrinho carrinho = (Carrinho) new XStream().fromXML(conteudo);
 		Assert.assertEquals("Rua Vergueiro 3185, 8 andar", carrinho.getRua());
@@ -34,8 +36,6 @@ public class ClienteTest {
 	
 	@Test
 	public void adicionaCarrinho(){
-		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(SITE);
 		Carrinho carrinho = criaCarrinhoTeste();
 		String xml = carrinho.toXML();
 		Entity<String> entity = Entity.entity(xml, MediaType.APPLICATION_XML);
@@ -63,7 +63,11 @@ public class ClienteTest {
 	
 	@Before
 	public void before(){
-		server = Servidor.inicializaServidor();				
+		server = Servidor.inicializaServidor();
+		ClientConfig clientConfig =  new ClientConfig();
+		clientConfig.register(new LoggingFilter());
+		client = ClientBuilder.newClient(clientConfig);
+		target = client.target(SITE);
 	}
 	
 }
